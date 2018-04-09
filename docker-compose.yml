@@ -1,0 +1,27 @@
+version: '2.3'
+
+volumes:
+  db_data:
+
+services:
+  api:
+    build:
+      context: .
+      target: api
+    container_name: authent-api
+    command: npm run dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./api/package.json:/app/package.json
+      - ./api/yarn.lock:/app/yarn.lock
+      - ./api/node_modules:/app/node_modules
+      - ./api/index.js:/app/index.js
+  db:
+    image: postgres:latest
+    container_name: authent-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - db_data:/var/lib/postgresql/data
