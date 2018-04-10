@@ -1,8 +1,5 @@
 version: '2.3'
 
-volumes:
-  db_data:
-
 services:
   app:
     build:
@@ -24,11 +21,4 @@ services:
       - "3001:3000"
     volumes:
       - ./api:/app
-  db:
-    image: postgres:latest
-    container_name: authent-db
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-    volumes:
-      - db_data:/var/lib/postgresql/data
+      - /app/node_modules

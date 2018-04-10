@@ -1,0 +1,36 @@
+:api = http://localhost:3001/api
+# User#1 token
+# :token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.zP4UTqFfrpOp5H_T_EGwT4ifQFH08yZAFS5VRrwcohw
+# User#2 token
+:token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.NeaS465uTgZkRoN47ORBBZ7M4mCoZ-965x0SKwhl4yo
+:auth_header = <<
+Authorization: Bearer :token
+#
+
+# Create an user
+POST :api/users
+Content-Type: application/json
+
+{
+	"name": "toto",
+	"password": "mypass",
+	"email": "toto@titi.fr",
+	"phoneNumber": "0666201317"
+}
+
+# Get an user info
+GET :api/users/2
+:auth_header
+
+# Delete an user
+DELETE :api/users/1
+:auth_header
+
+# Authenticate
+POST :api/auth/token
+Content-Type: application/json
+
+{
+	"email": "toto@titi.fr",
+	"password": "mypass"
+}
