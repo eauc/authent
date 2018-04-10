@@ -1,12 +1,27 @@
 FROM node:8 as api
 
-RUN npm install -g yarn
+WORKDIR /app
+
+COPY ./api/package.json ./api/yarn.lock ./
+RUN yarn install
+
+COPY ./api .
+
+FROM node:8 as app
 
 WORKDIR /app
 
-COPY api/package.json api/yarn.lock ./
+COPY ./app/package.json ./app/yarn.lock ./
 RUN yarn install
 
-COPY ./api ./
+COPY ./app .
+RUN npm run build
+
+FROM node:8 as server
+
+WORKDIR /app
+
+COPY --from=api /app .
+COPY --from=app /app/build public
 
 CMD ["npm","start"]
