@@ -9,6 +9,8 @@ services:
     command: npm start
     ports:
       - "3000:3000"
+    links:
+      - api
     volumes:
       - ./app:/app
       - /app/node_modules
