@@ -1,11 +1,17 @@
+# Variables
+# API
 :api = http://localhost:3001/api
 # User#1 token
-# :token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.zP4UTqFfrpOp5H_T_EGwT4ifQFH08yZAFS5VRrwcohw
+:token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.zP4UTqFfrpOp5H_T_EGwT4ifQFH08yZAFS5VRrwcohw
 # User#2 token
-:token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.NeaS465uTgZkRoN47ORBBZ7M4mCoZ-965x0SKwhl4yo
+# :token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.NeaS465uTgZkRoN47ORBBZ7M4mCoZ-965x0SKwhl4yo
 :auth_header = <<
 Authorization: Bearer :token
 #
+# SMS
+:sms_user = TBD
+:sms_pass = TBD
+:sms_msg = Votre%20Code%20de%20Confirmation%20est%20123456
 
 # Create an user
 POST :api/users
@@ -19,7 +25,7 @@ Content-Type: application/json
 }
 
 # Get an user info
-GET :api/users/2
+GET :api/users/1
 :auth_header
 
 # Delete an user
@@ -27,10 +33,26 @@ DELETE :api/users/1
 :auth_header
 
 # Authenticate
-POST :api/auth/token
+# Get code
+POST :api/auth/code
 Content-Type: application/json
 
 {
 	"email": "toto@titi.fr",
 	"password": "mypass"
 }
+
+# Authenticate
+# Get token
+POST :api/auth/token
+Content-Type: application/json
+
+{
+	"email": "toto@titi.fr",
+	"password": "mypass",
+	"code": "013727"
+}
+
+# Send SMS Free mobile
+
+GET https://smsapi.free-mobile.fr/sendmsg?user=:sms_user&pass=:sms_pass&msg=:sms_msg

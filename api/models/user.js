@@ -38,6 +38,13 @@ module.exports = (db, DataType) => {
 	notEmpty: true,
       },
     },
+    code: {
+      type: DataType.STRING,
+      allowNull: true,
+      validate: {
+	notEmpty: true,
+      },
+    },
   }, {
     hooks: {
       beforeCreate: (user) => {
