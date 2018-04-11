@@ -1,21 +1,34 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {Link, Route, Switch, withRouter} from 'react-router-dom';
+import {Menu, Segment} from 'semantic-ui-react';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+const HomePage = () => (
+  <Segment basic>Home page</Segment>
+);
 
-export default App;
+const LoginPage = () => (
+  <Segment basic>Login page</Segment>
+);
+
+const SignUpPage = () => (
+  <Segment basic>SignUp page</Segment>
+);
+
+export default withRouter(({location: {pathname}}) => {
+  return (
+    <div>
+      <Segment inverted basic>
+        <Menu inverted pointing secondary>
+          <Menu.Item as={Link} to="/" active={pathname==="/"}>Home</Menu.Item>
+          <Menu.Item as={Link} to="/login" active={pathname==="/login"}>Login</Menu.Item>
+          <Menu.Item as={Link} to="/signup" active={pathname==="/signup"}>Sign Up</Menu.Item>
+        </Menu>
+      </Segment>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/signup" component={SignUpPage} />
+      </Switch>
+    </div>
+  );
+});
