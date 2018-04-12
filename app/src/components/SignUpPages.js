@@ -10,7 +10,7 @@ export const SignUpSuccessPage = () => (
   <Segment basic>
     <Message success>
       <Message.Header>Your registration was successful !</Message.Header>
-      <p>You may now log-in with the username you have chosen</p>
+      <p>You may now log-in with the username you have chosen.</p>
     </Message>
   </Segment>
 );
@@ -19,7 +19,7 @@ export const SignUpErrorPage = () => (
   <Segment basic>
     <Message error>
       <Message.Header>Your registration failed :(</Message.Header>
-      <p>Same player, try again</p>
+      <p>Same player, try again.</p>
     </Message>
   </Segment>
 );
