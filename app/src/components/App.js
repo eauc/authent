@@ -1,14 +1,15 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Link, Route, Switch, withRouter} from 'react-router-dom';
 import {Menu, Segment} from 'semantic-ui-react';
+import actions from '../actions';
 import {LoginPage, LoginCodePage, LoginErrorPage} from './LoginPages';
 import {SignUpPage, SignUpSuccessPage, SignUpErrorPage} from './SignUpPages';
+import {UserInfoPage} from './UserPages';
 
-const HomePage = () => (
-  <Segment basic>Home page</Segment>
-);
+const mapStateToProps = ({auth}) => ({auth});
 
-export default withRouter(({location: {pathname}}) => {
+export default withRouter(connect(mapStateToProps, actions)(({auth, userInfo, location: {pathname}}) => {
   return (
     <div>
       <Segment inverted basic>
@@ -19,7 +20,7 @@ export default withRouter(({location: {pathname}}) => {
         </Menu>
       </Segment>
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" render={getUserInfo({auth, userInfo})}/>
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/login/code" component={LoginCodePage} />
         <Route exact path="/login/error" component={LoginErrorPage} />
@@ -29,4 +30,11 @@ export default withRouter(({location: {pathname}}) => {
       </Switch>
     </div>
   );
-});
+}));
+
+function getUserInfo({auth, userInfo}) {
+  return ({history}) => {
+    userInfo(auth, history);
+    return (<UserInfoPage />);
+  };
+}

@@ -1,34 +1,9 @@
-import axios from 'axios';
 import React from 'react';
+import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Field, reduxForm} from 'redux-form';
 import {Button, Form, Input, Message} from 'semantic-ui-react';
-
-const delayS = (delayInSeconds) => {
-  return (value) => new Promise((resolve) => {
-    setTimeout(() => resolve(value), delayInSeconds * 1000);
-  });
-};
-
-const apiHost = process.env.NODE_ENV === "production" ? "/" : "http://localhost:3001/";
-const submit = (history) => (values) => {
-  axios({
-    method: "post",
-    url: `${apiHost}api/users`,
-    data: values,
-  }).then((result) => {
-    console.log("result", result);
-    history.push("/signup/success");
-    return "/login";
-  }, (error) => {
-    console.log("error", error);
-    history.push("/signup/error");
-    return "/signup";
-  }).then(delayS(2))
-    .then((path) => {
-      history.push(path);
-    });
-};
+import actions from "../actions";
 
 const renderField = (props) => {
   const {input, label, name, type, meta: {touched, error}} = props;
@@ -42,9 +17,9 @@ const renderField = (props) => {
 };
 
 const SignUpForm = (props) => {
-  const {handleSubmit, history, valid} = props;
+  const {handleSubmit, history, userSignUp, valid} = props;
   return (
-    <Form onSubmit={handleSubmit(submit(history))}>
+    <Form onSubmit={handleSubmit((values) => userSignUp(values, history))}>
       <Field name="name" label="Name" component={renderField} type="text" />
       <Field name="password" label="Password" component={renderField} type="password" />
       <Field name="email" label="Email" component={renderField} type="text" />
@@ -92,4 +67,4 @@ export default reduxForm({
   form: 'signup',
   validate,
   initialValues,
-})(withRouter(SignUpForm));
+})(withRouter(connect(() => ({}), actions)(SignUpForm)));

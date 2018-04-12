@@ -8,10 +8,10 @@ const {models: {Users}} = require("../db");
 
 const router = Router();
 
-router.route("/:id")
+router.route("/me")
   .all(authenticate)
   .get((req, res) => {
-    Users.findById(req.params.id, {
+    Users.findById(req.user.id, {
       attributes: ["id", "name", "email", "phoneNumber"]
     }).then((result) => res.json(result))
       .catch((error) => {
@@ -19,12 +19,30 @@ router.route("/:id")
       });
   })
   .delete((req, res) => {
-    Users.destroy({where: {id: req.params.id} })
+    Users.destroy({where: {id: req.user.id} })
       .then((result) => res.sendStatus(204))
       .catch((error) => {
         res.status(412).json(_.pick(error, "message"));
       });
   });
+
+// router.route("/:id")
+//   .all(authenticate)
+//   .get((req, res) => {
+//     Users.findById(req.params.id, {
+//       attributes: ["id", "name", "email", "phoneNumber"]
+//     }).then((result) => res.json(result))
+//       .catch((error) => {
+//         res.status(412).json(_.pick(error, "message"));
+//       });
+//   })
+//   .delete((req, res) => {
+//     Users.destroy({where: {id: req.params.id} })
+//       .then((result) => res.sendStatus(204))
+//       .catch((error) => {
+//         res.status(412).json(_.pick(error, "message"));
+//       });
+//   });
 
 router.post("/", (req, res) => {
   Users.create(req.body)

@@ -20,10 +20,16 @@ export function authLogin({email, password}, history) {
 }
 
 export function authLoginCode({email, password}, {code}, history) {
-  return () => {
+  return (dispatch) => {
     api.authLoginCode({email, password, code})
-      .then((result) => {
-        history.push("/");
+      .then(({data: {token}}) => {
+        dispatch({
+          type: "AUTH_SET_TOKEN",
+          token,
+        });
+        setTimeout(() => {
+          history.push("/");
+        }, 200);
       }, (error) => {
         history.push("/login/error");
         setTimeout(() => {

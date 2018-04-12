@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 # Get an user info
-GET :api/users/1
+GET :api/users/me
 :auth_header
 
 # Delete an user

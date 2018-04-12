@@ -33,3 +33,33 @@ export function authLoginCode({email, password, code}) {
     return Promise.reject(error);
   });
 }
+
+export function userSignUp(values) {
+  return axios({
+    method: "post",
+    url: `${apiHost}api/users`,
+    data: values,
+  }).then((result) => {
+    console.info("userSignUp", {result});
+    return result;
+  }, (error) => {
+    console.error("userSignUp", {error});
+    return Promise.reject(error);
+  });
+}
+
+export function userInfo({token}) {
+  return axios({
+    method: "get",
+    url: `${apiHost}api/users/me`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((result) => {
+    console.info("userInfo", {result});
+    return result;
+  }, (error) => {
+    console.error("userInfo", {error});
+    return Promise.reject(error);
+  });
+}
