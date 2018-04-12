@@ -58,7 +58,7 @@ const validate = ({name, password, email, phoneNumber}) => {
 
 const initialValues = process.env.NODE_ENV === "production" ? {} : {
   name: "toto",
-  password: "titi",
+  password: "mypass",
   email: "toto@titi.fr",
   phoneNumber: "0123456789",
 };
