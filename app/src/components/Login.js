@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Field, reduxForm} from 'redux-form';
-import {Button, Form, Input, Message} from 'semantic-ui-react';
+import {Button, Form, Input, Message, Segment} from 'semantic-ui-react';
 
 import actions from '../actions';
 
@@ -87,3 +87,19 @@ export const LoginCode = reduxForm({
   form: 'login-code',
   validateLoginCode,
 })(withRouter(connect(mapStateToProps, actions)(LoginCodeForm)));
+
+export const Logout = connect(
+  () => ({}),
+  (dispatch) => ({
+    authLogout: () => dispatch({
+      type: "AUTH_LOGOUT",
+    }),
+  })
+)(({authLogout}) => (
+  <Segment basic>
+    <p>You are Logged in.</p>
+    <Button primary onClick={authLogout}>
+      Log out
+    </Button>
+  </Segment>
+));

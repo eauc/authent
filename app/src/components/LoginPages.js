@@ -1,12 +1,16 @@
+import _ from 'lodash';
 import React from 'react';
+import {connect} from 'react-redux';
 import {Message, Segment} from 'semantic-ui-react';
-import {Login, LoginCode} from './Login';
+import {Login, LoginCode, Logout} from './Login';
 
-export const LoginPage = () => (
+export const LoginPage = connect((state) => ({
+  isLogged: Boolean(_.get(state, "auth.token")),
+}))(({isLogged}) => (
   <Segment basic>
-    <Login />
+    {isLogged ? <Logout /> : <Login />}
   </Segment>
-);
+));
 
 export const LoginCodePage = () => (
   <Segment basic>

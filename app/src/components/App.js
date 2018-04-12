@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link, Route, Switch, withRouter} from 'react-router-dom';
@@ -7,16 +8,23 @@ import {LoginPage, LoginCodePage, LoginErrorPage} from './LoginPages';
 import {SignUpPage, SignUpSuccessPage, SignUpErrorPage} from './SignUpPages';
 import {UserInfoPage} from './UserPages';
 
-const mapStateToProps = ({auth}) => ({auth});
+const mapStateToProps = ({auth}) => {
+  return {
+    auth,
+    isLogged: Boolean(_.get(auth, "token")),
+  };
+};
 
-export default withRouter(connect(mapStateToProps, actions)(({auth, userInfo, location: {pathname}}) => {
+export default withRouter(connect(mapStateToProps, actions)(({auth, isLogged, userInfo, location: {pathname}}) => {
   return (
     <div>
       <Segment inverted basic>
         <Menu inverted pointing secondary>
           <Menu.Item as={Link} to="/" active={pathname==="/"}>Home</Menu.Item>
-          <Menu.Item as={Link} to="/login" active={pathname.startsWith("/login")}>Login</Menu.Item>
-          <Menu.Item as={Link} to="/signup" active={pathname.startsWith("/signup")}>Sign Up</Menu.Item>
+	  <Menu.Item as={Link} to="/login" active={pathname.startsWith("/login")}>
+	    {isLogged ? "Logout" : "Login"}
+	  </Menu.Item>
+          {isLogged ? " " : <Menu.Item as={Link} to="/signup" active={pathname.startsWith("/signup")}>Sign Up</Menu.Item>}
         </Menu>
       </Segment>
       <Switch>

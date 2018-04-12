@@ -21,6 +21,13 @@ export default (state = DEFAULT_STATE, {type, email, password, token}) => {
         token,
       };
     }
+  case "AUTH_LOGOUT":
+    {
+      return {
+        ...state,
+        token: null,
+      };
+    }
   default:
     {
       return state;
