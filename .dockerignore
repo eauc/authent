@@ -1,3 +1,4 @@
 app/build
 */coverage
 */node_modules
+api/db.sqlite
