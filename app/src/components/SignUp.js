@@ -16,14 +16,21 @@ const renderField = (props) => {
   );
 };
 
+const phoneNumber = (value) => {
+  if (!value) {
+    return value;
+  }
+  return value.replace(/\s+/g, '');
+};
+
 const SignUpForm = (props) => {
   const {handleSubmit, history, userSignUp, valid} = props;
   return (
     <Form onSubmit={handleSubmit((values) => userSignUp(values, history))}>
       <Field name="name" label="Name" component={renderField} type="text" />
       <Field name="password" label="Password" component={renderField} type="password" />
-      <Field name="email" label="Email" component={renderField} type="text" />
-      <Field name="phoneNumber" label="Phone Number" component={renderField} type="text" />
+      <Field name="email" label="Email" component={renderField} type="email" />
+      <Field name="phoneNumber" label="Phone Number" component={renderField} type="tel" normalize={phoneNumber} />
       <Button type="submit" primary disabled={!valid}>
         Create Account
       </Button>

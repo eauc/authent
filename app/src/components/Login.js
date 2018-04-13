@@ -22,7 +22,7 @@ const LoginForm = (props) => {
   const {authLogin, handleSubmit, history, valid} = props;
   return (
     <Form onSubmit={handleSubmit((values) => authLogin(values, history))}>
-      <Field name="email" label="EMail" component={renderField} type="text" />
+      <Field name="email" label="Email" component={renderField} type="email" />
       <Field name="password" label="Password" component={renderField} type="password" />
       <Button type="submit" primary disabled={!valid}>
         Login
