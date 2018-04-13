@@ -32,7 +32,10 @@ export function userInfo({token}, history) {
           user,
         });
       }, (error) => {
-        history.push("/login");
+        dispatch({
+          type: "AUTH_SET_TOKEN",
+          token: null,
+        });
       });
   };
 }
