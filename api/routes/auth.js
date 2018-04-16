@@ -4,6 +4,7 @@ const _ = require("lodash");
 const axios = require("axios");
 const {Router} = require("express");
 const jwt = require("jwt-simple");
+const speakEasy = require("speakeasy");
 
 const {jwtSecret} = require("../auth");
 const {models: {Users}} = require("../db");
@@ -30,16 +31,18 @@ router.post("/code", (req, res) => {
         res.sendStatus(401);
         return;
       }
-      const code = generateCode();
-      Users.update({code}, {where: {id: user.id}})
-        .then(() => sendSMS({
-	  to: user.phoneNumber,
-          message: `Votre code de confirmation est ${code}`,
-        })).then(() => {
-          res.sendStatus(204);
-        }).catch((error) => {
-          res.sendStatus(_.get(error, "response.status", 500));
-        });
+      const code = speakEasy.totp({
+        secret: user.code,
+        encoding: 'base32'
+      });
+      sendSMS({
+	to: user.phoneNumber,
+        message: `Votre code de confirmation est ${code}`,
+      }).then(() => {
+        res.sendStatus(204);
+      }).catch((error) => {
+        res.sendStatus(_.get(error, "response.status", 500));
+      });
     })
     .catch((error) => {
       console.log("user not found", error);
@@ -61,7 +64,13 @@ router.post("/token", (req, res) => {
         res.sendStatus(401);
         return;
       }
-      if (user.code !== code) {
+      const codeIsValid = speakEasy.totp.verify({
+        secret: user.code,
+        encoding: 'base32',
+        token: code,
+        window: 6,
+      });
+      if (!codeIsValid) {
         console.log("invalid code");
         res.sendStatus(401);
         return;

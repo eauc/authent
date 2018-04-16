@@ -1,6 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
+const speakEasy = require("speakeasy");
 const {Router} = require("express");
 
 const {authenticate} = require("../auth");
@@ -45,7 +46,14 @@ router.route("/me")
 //   });
 
 router.post("/", (req, res) => {
-  Users.create(req.body)
+  const code = speakEasy.generateSecret({length:20}).base32;
+  const userData = Object.assign(
+    {},
+    req.body,
+    {code}
+  );
+  console.log("Creating user...", {userData});
+  Users.create(userData)
     .then((result) => res.json(result))
     .catch((error) => {
       res.status(412).json(_.pick(error, "message"));
