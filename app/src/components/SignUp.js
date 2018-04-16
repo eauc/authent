@@ -1,8 +1,9 @@
+import _ from 'lodash';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Field, reduxForm} from 'redux-form';
-import {Button, Form, Input, Message} from 'semantic-ui-react';
+import {Button, Form, Image, Input, Message} from 'semantic-ui-react';
 import actions from "../actions";
 
 const renderField = (props) => {
@@ -70,8 +71,17 @@ const initialValues = process.env.NODE_ENV === "production" ? {} : {
   phoneNumber: "0123456789",
 };
 
-export default reduxForm({
+export const SignUp = reduxForm({
   form: 'signup',
   validate,
   initialValues,
 })(withRouter(connect(() => ({}), actions)(SignUpForm)));
+
+export const SignUpQrCode = connect(
+  ({user}) => ({qrcode: _.get(user, "qrcode", null)})
+)(({qrcode}) => (
+  <Message info>
+    <p>Please scan this QR Code in Google Authenticator Application in order to get your verification codes.</p>
+    <Image alt="Google Authenticator QR Code" centered src={qrcode} />
+  </Message>
+));

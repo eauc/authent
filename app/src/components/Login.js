@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Field, reduxForm} from 'redux-form';
-import {Button, Form, Input, Message, Segment} from 'semantic-ui-react';
+import {Button, Checkbox, Form, Input, Message, Segment} from 'semantic-ui-react';
 
 import actions from '../actions';
 
@@ -18,12 +18,26 @@ const renderField = (props) => {
   );
 };
 
+const renderToggle = (props) => {
+  const {input: {value, onChange}, ...rest} = props;
+  console.log(props);
+  return (
+    <Form.Field>
+      <Checkbox {...rest}
+                defaultChecked={!!value}
+                onChange={(e, data) => onChange(data.checked)}
+                toggle type="checkbox" />
+    </Form.Field>
+  );
+};
+
 const LoginForm = (props) => {
   const {authLogin, handleSubmit, history, valid} = props;
   return (
-    <Form onSubmit={handleSubmit((values) => authLogin(values, history))}>
+    <Form onSubmit={handleSubmit((values) => {console.log(values); authLogin(values, history);})}>
       <Field name="email" label="Email" component={renderField} type="email" />
       <Field name="password" label="Password" component={renderField} type="password" />
+      <Field name="sendSMS" label="Get my code by SMS" component={renderToggle} />
       <Button type="submit" primary disabled={!valid}>
         Login
       </Button>
@@ -69,6 +83,7 @@ const validateLoginCode = ({code}) => {
 const initialValues = process.env.NODE_ENV === "production" ? {} : {
   email: "toto@titi.fr",
   password: "mypass",
+  sendSMS: false,
 };
 
 export const Login = reduxForm({

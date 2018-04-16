@@ -1,8 +1,8 @@
 import * as api from "../api";
 
-export function authLogin({email, password}, history) {
+export function authLogin({email, password, sendSMS}, history) {
   return (dispatch) => {
-    api.authLogin({email, password})
+    api.authLogin({email, password, sendSMS})
       .then((result) => {
         history.push("/login/code");
         dispatch({

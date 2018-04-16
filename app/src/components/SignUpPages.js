@@ -1,6 +1,7 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {Message, Segment} from 'semantic-ui-react';
-import SignUp from './SignUp';
+import {SignUp, SignUpQrCode} from './SignUp';
 
 export const SignUpPage = () => (
   <Segment basic><SignUp /></Segment>
@@ -10,8 +11,9 @@ export const SignUpSuccessPage = () => (
   <Segment basic>
     <Message success>
       <Message.Header>Your registration was successful !</Message.Header>
-      <p>You may now log-in with the username you have chosen.</p>
+      <p>You may now <Link to="/login">log-in</Link> with the username you have chosen.</p>
     </Message>
+    <SignUpQrCode />
   </Segment>
 );
 

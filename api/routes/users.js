@@ -1,8 +1,9 @@
 "use strict";
 
 const _ = require("lodash");
-const speakEasy = require("speakeasy");
 const {Router} = require("express");
+const qrCode = require("qrcode");
+const speakEasy = require("speakeasy");
 
 const {authenticate} = require("../auth");
 const {models: {Users}} = require("../db");
@@ -46,15 +47,21 @@ router.route("/me")
 //   });
 
 router.post("/", (req, res) => {
-  const code = speakEasy.generateSecret({length:20}).base32;
+  const secret = speakEasy.generateSecret({length:20});
   const userData = Object.assign(
     {},
     req.body,
-    {code}
+    {code: secret.base32}
   );
   console.log("Creating user...", {userData});
   Users.create(userData)
-    .then((result) => res.json(result))
+    .then((result) => {
+      return qrCode.toDataURL(secret.otpauth_url)
+        .then((data_url) => {
+          result.dataValues.qrcode = data_url;
+          res.json(result);
+        });
+    })
     .catch((error) => {
       res.status(412).json(_.pick(error, "message"));
     });

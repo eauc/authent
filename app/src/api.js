@@ -2,11 +2,11 @@ import axios from "axios";
 
 const apiHost = process.env.NODE_ENV === "production" ? "/" : "http://localhost:3001/";
 
-export function authLogin({email, password}) {
+export function authLogin({email, password, sendSMS}) {
   return axios({
     method: "post",
     url: `${apiHost}api/auth/code`,
-    data: {email, password},
+    data: {email, password, sendSMS},
   }).then((result) => {
     console.info("authLogin", {result});
     return result;

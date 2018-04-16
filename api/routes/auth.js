@@ -13,7 +13,7 @@ const {sendSMS} = require("../sms");
 const router = Router();
 
 router.post("/code", (req, res) => {
-  const {body: {email, password}} = req;
+  const {body: {email, password, sendSMS: reqSendSMS}} = req;
   if (!email || !password) {
     console.log("missing ids");
     res.sendStatus(401);
@@ -23,30 +23,24 @@ router.post("/code", (req, res) => {
     .then((user) => {
       if (!user) {
         console.log("user not found");
-        res.sendStatus(401);
-        return;
+        return {status: 401};
       }
       if (!Users.isPassword(user.password, password)) {
         console.log("invalid pass");
-        res.sendStatus(401);
-        return;
+        return {status: 401};
       }
       const code = speakEasy.totp({
         secret: user.code,
         encoding: 'base32'
       });
-      sendSMS({
+      return reqSendSMS ? sendSMS({
 	to: user.phoneNumber,
         message: `Votre code de confirmation est ${code}`,
-      }).then(() => {
-        res.sendStatus(204);
-      }).catch((error) => {
-        res.sendStatus(_.get(error, "response.status", 500));
-      });
-    })
-    .catch((error) => {
-      console.log("user not found", error);
-      res.sendStatus(401);
+      }) : undefined;
+    }).then(({status} = {status: 204}) => {
+      res.sendStatus(status);
+    }).catch((error) => {
+      res.sendStatus(_.get(error, "response.status", 500));
     });
 });
 

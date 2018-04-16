@@ -7,18 +7,23 @@ const delayS = (delayInSeconds) => {
 };
 
 export function userSignUp(values, history) {
-  return () => {
+  return (dispatch) => {
     api.userSignUp(values)
-      .then((result) => {
-        history.push("/signup/success");
-        return "/login";
+      .then(({data: {qrcode}}) => {
+        dispatch({
+          type: "USER_SET_QRCODE",
+          qrcode,
+        });
+        return delayS(0.1)()
+          .then((path) => {
+            history.push("/signup/success");
+          });
       }, (error) => {
         history.push("/signup/error");
-        return "/signup";
-      })
-      .then(delayS(2))
-      .then((path) => {
-        history.push(path);
+        return delayS(2)()
+          .then((path) => {
+            history.push("/signup");
+          });
       });
   };
 };
