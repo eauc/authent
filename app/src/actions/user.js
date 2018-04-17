@@ -9,10 +9,11 @@ const delayS = (delayInSeconds) => {
 export function userSignUp(values, history) {
   return (dispatch) => {
     api.userSignUp(values)
-      .then(({data: {qrcode}}) => {
+      .then(({data: {qrcode, secret}}) => {
         dispatch({
-          type: "USER_SET_QRCODE",
+          type: "USER_SET_SECRET",
           qrcode,
+          secret,
         });
         return delayS(0.1)()
           .then((path) => {

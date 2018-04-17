@@ -58,6 +58,7 @@ router.post("/", (req, res) => {
     .then((result) => {
       return qrCode.toDataURL(secret.otpauth_url)
         .then((data_url) => {
+          result.dataValues.secret = secret.base32;
           result.dataValues.qrcode = data_url;
           res.json(result);
         });

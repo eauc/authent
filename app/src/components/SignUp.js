@@ -78,10 +78,14 @@ export const SignUp = reduxForm({
 })(withRouter(connect(() => ({}), actions)(SignUpForm)));
 
 export const SignUpQrCode = connect(
-  ({user}) => ({qrcode: _.get(user, "qrcode", null)})
-)(({qrcode}) => (
+  ({user}) => ({
+    qrcode: _.get(user, "qrcode", null),
+    secret: _.get(user, "secret", null),
+  })
+)(({qrcode, secret}) => (
   <Message info>
-    <p>Please scan this QR Code in Google Authenticator Application in order to get your verification codes.</p>
+    <p>Please scan this QR Code or enter this secret key in Google Authenticator Application in order to get your verification codes.</p>
+    <pre>{secret}</pre>
     <Image alt="Google Authenticator QR Code" centered src={qrcode} />
   </Message>
 ));
