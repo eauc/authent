@@ -3,7 +3,7 @@ const DEFAULT_STATE = {
   secret: null,
 };
 
-export default (state = DEFAULT_STATE, {type, user, qrcode, secret}) => {
+export default (state = DEFAULT_STATE, {type, user, qrcode, secret, phoneNumber}) => {
   switch(type) {
   case "USER_SET":
     {
@@ -15,6 +15,7 @@ export default (state = DEFAULT_STATE, {type, user, qrcode, secret}) => {
         ...user,
         qrcode,
         secret,
+        phoneNumber,
       };
     }
   default:

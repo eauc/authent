@@ -69,6 +69,10 @@ router.post("/token", (req, res) => {
         res.sendStatus(401);
         return;
       }
+      if (!user.phoneNumberValidated) {
+        user.phoneNumberValidated = true;
+        user.save();
+      }
       const payload = {id: user.id};
       res.json({
         token: jwt.encode(payload, jwtSecret)

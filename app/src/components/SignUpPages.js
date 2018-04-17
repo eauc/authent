@@ -1,21 +1,36 @@
+import _ from 'lodash';
 import React from 'react';
+import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Message, Segment} from 'semantic-ui-react';
-import {SignUp, SignUpQrCode} from './SignUp';
+import {SignUp, SignUpConfirm, SignUpQrCode} from './SignUp';
 
 export const SignUpPage = () => (
   <Segment basic><SignUp /></Segment>
 );
 
-export const SignUpSuccessPage = () => (
+export const SignUpConfirmPage = connect(({user}) => ({
+  hasPhoneNumber: Boolean(_.get(user, "phoneNumber")),
+}))(({hasPhoneNumber}) => (
+  <Segment basic>
+    <Message info>
+      <p>Please confirm your phone to complete registration.</p>
+      <SignUpConfirm />
+    </Message>
+    {!hasPhoneNumber ?  <SignUpQrCode /> : ""}
+  </Segment>
+));
+
+export const SignUpSuccessPage = connect(({user}) => ({
+  hasPhoneNumber: Boolean(_.get(user, "phoneNumber")),
+}))(({hasPhoneNumber}) => (
   <Segment basic>
     <Message success>
       <Message.Header>Your registration was successful !</Message.Header>
       <p>You may now <Link to="/login">log-in</Link> with the username you have chosen.</p>
     </Message>
-    <SignUpQrCode />
   </Segment>
-);
+));
 
 export const SignUpErrorPage = () => (
   <Segment basic>

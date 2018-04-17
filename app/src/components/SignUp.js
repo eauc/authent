@@ -56,9 +56,7 @@ const validate = ({name, password, email, phoneNumber}) => {
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
     errors.email = "Must be a valid email address";
   }
-  if (!phoneNumber) {
-    errors.phoneNumber = "Required";
-  } else if (!/^0\d{9}$/.test(phoneNumber)) {
+  if (phoneNumber && !/^0\d{9}$/.test(phoneNumber)) {
     errors.phoneNumber = "Must be a valid phone number";
   }
   return errors;
@@ -89,3 +87,19 @@ export const SignUpQrCode = connect(
     <Image alt="Google Authenticator QR Code" centered src={qrcode} />
   </Message>
 ));
+
+const SignUpConfirmForm = (props) => {
+  const {handleSubmit, history, userSignUpConfirm, valid} = props;
+  return (
+    <Form onSubmit={handleSubmit((values) => userSignUpConfirm(values, history))}>
+      <Field name="code" label="Confirmation code" component={renderField} type="text" />
+      <Button type="submit" primary disabled={!valid}>
+        Confirm Phonenumber
+      </Button>
+    </Form>
+  );
+};
+
+export const SignUpConfirm = reduxForm({
+  form: 'signup-confirm',
+})(withRouter(connect(() => ({}), actions)(SignUpConfirmForm)));

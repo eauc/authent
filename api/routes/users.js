@@ -7,6 +7,7 @@ const speakEasy = require("speakeasy");
 
 const {authenticate} = require("../auth");
 const {models: {Users}} = require("../db");
+const {sendSMS} = require("../sms");
 
 const router = Router();
 
@@ -51,20 +52,40 @@ router.post("/", (req, res) => {
   const userData = Object.assign(
     {},
     req.body,
-    {code: secret.base32}
+    {
+      code: secret.base32,
+      phoneNumberValidated: false,
+    }
   );
+  const {phoneNumber} = userData;
+  const userHasPhoneNumber = phoneNumber && /^0\d{9}$/.test(phoneNumber);
   console.log("Creating user...", {userData});
-  Users.create(userData)
-    .then((result) => {
-      return qrCode.toDataURL(secret.otpauth_url)
-        .then((data_url) => {
+  const code = speakEasy.totp({
+    secret: secret.base32,
+    encoding: 'base32'
+  });
+  qrCode.toDataURL(secret.otpauth_url)
+    .then((data_url) => {
+      return Users.create(userData)
+        .then((result) => {
           result.dataValues.secret = secret.base32;
           result.dataValues.qrcode = data_url;
           res.json(result);
         });
     })
     .catch((error) => {
+      console.log("Error creating user", {userData, error});
       res.status(412).json(_.pick(error, "message"));
+      return Promise.reject(error);
+    })
+    .then(() => {
+      if (!userHasPhoneNumber) {
+        return;
+      }
+      sendSMS({
+        to: phoneNumber,
+        message: `Validate your phone number with code ${code}`,
+      });
     });
 });
 

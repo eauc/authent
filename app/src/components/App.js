@@ -5,7 +5,7 @@ import {Link, Route, Switch, withRouter} from 'react-router-dom';
 import {Menu, Segment} from 'semantic-ui-react';
 import actions from '../actions';
 import {LoginPage, LoginCodePage, LoginErrorPage} from './LoginPages';
-import {SignUpPage, SignUpSuccessPage, SignUpErrorPage} from './SignUpPages';
+import {SignUpPage, SignUpConfirmPage, SignUpSuccessPage, SignUpErrorPage} from './SignUpPages';
 import {UserInfoPage} from './UserPages';
 
 const mapStateToProps = ({auth}) => {
@@ -33,6 +33,7 @@ export default withRouter(connect(mapStateToProps, actions)(({auth, isLogged, us
         <Route exact path="/login/code" component={LoginCodePage} />
         <Route exact path="/login/error" component={LoginErrorPage} />
         <Route exact path="/signup" component={SignUpPage} />
+        <Route exact path="/signup/confirm" component={SignUpConfirmPage} />
         <Route exact path="/signup/success" component={SignUpSuccessPage} />
         <Route exact path="/signup/error" component={SignUpErrorPage} />
       </Switch>

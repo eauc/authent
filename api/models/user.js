@@ -33,10 +33,14 @@ module.exports = (db, DataType) => {
     },
     phoneNumber: {
       type: DataType.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
 	notEmpty: true,
       },
+    },
+    phoneNumberValidated: {
+      type: DataType.BOOLEAN,
+      allowNull: false,
     },
     code: {
       type: DataType.STRING,
