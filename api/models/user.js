@@ -42,7 +42,7 @@ module.exports = (db, DataType) => {
       type: DataType.BOOLEAN,
       allowNull: false,
     },
-    code: {
+    secret: {
       type: DataType.STRING,
       allowNull: true,
       validate: {

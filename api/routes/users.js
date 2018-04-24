@@ -53,7 +53,7 @@ router.post("/", (req, res) => {
     {},
     req.body,
     {
-      code: secret.base32,
+      secret: secret.base32,
       phoneNumberValidated: false,
     }
   );

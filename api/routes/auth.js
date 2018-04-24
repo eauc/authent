@@ -30,7 +30,7 @@ router.post("/code", (req, res) => {
         return {status: 401};
       }
       const code = speakEasy.totp({
-        secret: user.code,
+        secret: user.secret,
         encoding: 'base32'
       });
       return reqSendSMS ? sendSMS({
@@ -59,7 +59,7 @@ router.post("/token", (req, res) => {
         return;
       }
       const codeIsValid = speakEasy.totp.verify({
-        secret: user.code,
+        secret: user.secret,
         encoding: 'base32',
         token: code,
         window: 6,
@@ -85,7 +85,3 @@ router.post("/token", (req, res) => {
 });
 
 module.exports = router;
-
-function generateCode () {
-  return String("000000" + ((Math.random() * 100000) >> 0)).slice(-6);
-}

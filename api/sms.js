@@ -5,8 +5,10 @@ const axios = require("axios");
 const twilio = require('twilio');
 
 const SMS_PARAMS = {
+  // free
   user: process.env.SMS_USER || "Undefined SMS_USER env var",
   pass: process.env.SMS_PASS || "Undefined SMS_PASS env var",
+  // twilio
   account: process.env.SMS_ACCOUNT || "Undefined SMS_ACCOUNT env var",
   token: process.env.SMS_TOKEN || "Undefined SMS_TOKEN env var",
   from: process.env.SMS_FROM || "Undefined SMS_FROM env var",

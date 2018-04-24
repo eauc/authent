@@ -15,7 +15,7 @@ const routes = require("./routes");
 app.use("/api", routes);
 
 const auth = require("./auth");
-app.use(auth.init);
+app.use(auth.middleware);
 
 const {db} = require("./db");
 db.sync().done(() => {
